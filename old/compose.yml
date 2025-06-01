@@ -1,0 +1,44 @@
+########################
+# docker-compose.yml
+########################
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis_service
+    ports:
+      - "6379:6379"  # Expose Redis for local testing 
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis_data:/data  # Persist data across restarts 
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: worker_service
+    # We still mount ./src to /app/src for live editing, but package is installed in site-packages
+    volumes:
+      - ./src:/app/src        # Bind‐mount local code 
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - HOST_ID=${HOST_ID:-local-worker}                   # Unique worker identifier 
+      - REDIS_HOST=redis                                    # Use service name “redis” 
+      - REDIS_PORT=6379
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}         # Optional 
+      - API_KEY=${API_KEY:-test-api-key}                   # For metrics HTTP calls 
+      - METRICS_URL=${METRICS_URL:-http://localhost:5000/api/metrics/batch}
+      - LOG_LEVEL=INFO                                     # Controls logging verbosity 
+    # No need to override command; Dockerfile’s shell‐form CMD is used
+    ports:
+      - "8000:8000"                                        # Expose Prometheus endpoint 
+    depends_on:
+      redis:
+        condition: service_healthy                        # Wait for Redis readiness 
+
+volumes:
+  redis_data: {}
