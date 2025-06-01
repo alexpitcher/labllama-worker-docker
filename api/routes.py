@@ -36,22 +36,50 @@ class CommandRequestModel(BaseModel):
     timeout: int = 30
 
 
+
 @app.get("/health")
 async def health_check():
-    """Health check endpoint - FAST VERSION (no blocking operations)."""
-    return {
-        "status": "healthy",
-        "timestamp": datetime.utcnow().isoformat(),
-        "services": {
-            "system_collector": "ok", 
-            "docker_collector": "ok",  # Always report OK
-            "command_executor": "ok"
-        },
-        "worker_info": {
-            "hostname": socket_module.gethostname(),
-            "version": "2.0.0"
+    """Health check endpoint - PROPER NON-BLOCKING VERSION."""
+    try:
+        # Test 1: Basic service availability (fast)
+        hostname = socket_module.gethostname()
+        
+        # Test 2: System collector (should be fast - just psutil)
+        system_ok = False
+        try:
+            # Quick CPU check only (no full metrics collection)
+            cpu_percent = psutil.cpu_percent(interval=0)  # Non-blocking
+            system_ok = True
+        except Exception as e:
+            logger.error(f"System collector check failed: {e}")
+        
+        # Test 3: Docker socket availability (fast check, no API calls)
+        docker_ok = False
+        try:
+            docker_socket_exists = os.path.exists('/var/run/docker.sock')
+            docker_ok = docker_socket_exists
+        except Exception as e:
+            logger.error(f"Docker socket check failed: {e}")
+        
+        # Test 4: Command executor (instant)
+        command_ok = True  # Just check if class exists
+        
+        return {
+            "status": "healthy" if all([system_ok, docker_ok, command_ok]) else "degraded",
+            "timestamp": datetime.utcnow().isoformat(),
+            "services": {
+                "system_collector": "ok" if system_ok else "error",
+                "docker_collector": "ok" if docker_ok else "error", 
+                "command_executor": "ok" if command_ok else "error"
+            },
+            "worker_info": {
+                "hostname": hostname,
+                "version": "2.0.0"
+            }
         }
-    }
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        raise HTTPException(status_code=503, detail=f"Health check failed: {str(e)}")
 
 
 @app.get("/metrics")
