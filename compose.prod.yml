@@ -9,7 +9,7 @@ services:
       - "8080:8080"
     environment:
       # Bot Communication
-      - LABLLAMA_BOT_URL=http://YOUR_BOT_IP:8000
+      - LABLLAMA_BOT_URL=http://10.204.0.30:8000
       - WORKER_HOST_ID=${HOSTNAME:-docker-host}
       - HEARTBEAT_INTERVAL=30
       
