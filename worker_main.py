@@ -69,18 +69,21 @@ class LabLlamaWorker:
         finally:
             await self.shutdown()
     
+# Fix in worker_main.py - register_with_bot method
+
     async def register_with_bot(self):
         """Register this worker with the bot."""
         try:
-            # Get worker info
-            async with self.session.get(f"http://localhost:{self.worker_port}/info") as response:
+            # FIXED: Get worker info from OUR OWN endpoint, not bot's
+            worker_port = int(os.getenv("WORKER_PORT", "8080"))
+            async with self.session.get(f"http://localhost:{worker_port}/info") as response:
                 if response.status == 200:
                     worker_info = await response.json()
                 else:
                     logger.error("Failed to get worker info for registration")
                     return
             
-            # Register with bot
+            # FIXED: Register with the BOT (not ourselves)
             registration_url = f"{self.bot_url}/api/workers/register"
             
             async with self.session.post(registration_url, json=worker_info) as response:
@@ -93,14 +96,16 @@ class LabLlamaWorker:
                     
         except Exception as e:
             logger.error(f"Failed to register with bot: {e}")
-    
+
     async def send_heartbeat(self):
         """Send heartbeat to bot."""
         try:
+            # FIXED: Send heartbeat to BOT (not ourselves)
             heartbeat_url = f"{self.bot_url}/api/workers/heartbeat"
             
-            # Get current worker status
-            async with self.session.get(f"http://localhost:{self.worker_port}/health") as response:
+            # Get current worker status from OUR OWN endpoint
+            worker_port = int(os.getenv("WORKER_PORT", "8080"))
+            async with self.session.get(f"http://localhost:{worker_port}/health") as response:
                 if response.status == 200:
                     health_data = await response.json()
                 else:
@@ -122,7 +127,7 @@ class LabLlamaWorker:
                     
         except Exception as e:
             logger.error(f"Failed to send heartbeat: {e}")
-    
+        
     async def heartbeat_loop(self):
         """Continuous heartbeat loop."""
         logger.info(f"Starting heartbeat loop (interval: {self.heartbeat_interval}s)")
