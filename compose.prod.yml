@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  labllama-worker:
+    image: 15pitchera/labllama-worker-docker:latest
+    container_name: labllama-worker
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Bot Communication
+      - LABLLAMA_BOT_URL=http://YOUR_BOT_IP:8000
+      - WORKER_HOST_ID=${HOSTNAME:-docker-host}
+      - HEARTBEAT_INTERVAL=30
+      
+      # Worker Configuration
+      - WORKER_PORT=8080
+      - WORKER_HOST=0.0.0.0
+      - LOG_LEVEL=INFO
+      
+      # Metrics Collection
+      - METRICS_INTERVAL=30
+    volumes:
+      # Docker socket for container monitoring (read-only)
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Persistent logs
+      - worker_logs:/app/logs
+      # Optional: Persistent data
+      - worker_data:/app/data
+    networks:
+      - labllama-worker-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Resource limits (optional but recommended)
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+
+volumes:
+  worker_logs:
+    driver: local
+  worker_data:
+    driver: local
+
+networks:
+  labllama-worker-net:
+    driver: bridge
