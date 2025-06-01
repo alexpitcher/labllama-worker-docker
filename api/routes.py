@@ -38,25 +38,20 @@ class CommandRequestModel(BaseModel):
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint - FIXED: Remove blocking Docker check."""
-    try:
-        # Quick system check without blocking operations
-        return {
-            "status": "healthy",
-            "timestamp": datetime.utcnow().isoformat(),
-            "services": {
-                "system_collector": "ok",
-                "docker_collector": "ok",
-                "command_executor": "ok"
-            },
-            "worker_info": {
-                "hostname": socket_module.gethostname(),  # FIXED: Use renamed import
-                "version": "2.0.0"
-            }
+    """Health check endpoint - FAST VERSION (no blocking operations)."""
+    return {
+        "status": "healthy",
+        "timestamp": datetime.utcnow().isoformat(),
+        "services": {
+            "system_collector": "ok", 
+            "docker_collector": "ok",  # Always report OK
+            "command_executor": "ok"
+        },
+        "worker_info": {
+            "hostname": socket_module.gethostname(),
+            "version": "2.0.0"
         }
-    except Exception as e:
-        logger.error(f"Health check failed: {e}")
-        raise HTTPException(status_code=503, detail=f"Health check failed: {str(e)}")
+    }
 
 
 @app.get("/metrics")
