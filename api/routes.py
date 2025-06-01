@@ -37,17 +37,20 @@ class CommandRequestModel(BaseModel):
 
 
 
+
 @app.get("/health")
 async def health_check():
-    """Health check endpoint - PROPER NON-BLOCKING VERSION."""
+    """Health check endpoint - FIXED psutil import."""
     try:
+        import psutil  # FIXED: Add missing import
+        
         # Test 1: Basic service availability (fast)
         hostname = socket_module.gethostname()
         
         # Test 2: System collector (should be fast - just psutil)
         system_ok = False
         try:
-            # Quick CPU check only (no full metrics collection)
+            # Quick CPU check only (non-blocking)
             cpu_percent = psutil.cpu_percent(interval=0)  # Non-blocking
             system_ok = True
         except Exception as e:
