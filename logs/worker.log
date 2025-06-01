@@ -80,3 +80,4 @@
 2025-06-01 16:57:52,467 - __main__ - ERROR - Failed to send heartbeat: Cannot connect to host host.docker.internal:8000 ssl:default [Connect call failed ('172.17.0.1', 8000)]
 2025-06-01 16:58:30,671 - __main__ - ERROR - Failed to send heartbeat: Cannot connect to host host.docker.internal:8000 ssl:default [Connect call failed ('172.17.0.1', 8000)]
 2025-06-01 16:59:08,771 - __main__ - ERROR - Failed to send heartbeat: Cannot connect to host host.docker.internal:8000 ssl:default [Connect call failed ('172.17.0.1', 8000)]
+2025-06-01 16:59:46,875 - __main__ - ERROR - Failed to send heartbeat: Cannot connect to host host.docker.internal:8000 ssl:default [Connect call failed ('172.17.0.1', 8000)]

@@ -26,3 +26,7 @@ docker-compose.override.yml
 *.swp
 
 .env
+
+logs/
+old/
+
