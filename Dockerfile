@@ -1,42 +1,51 @@
-# Stage 1: Builder with dependencies
+# --------------------------------------
+# Stage 1: Build dependencies
+# --------------------------------------
 FROM python:3.9-slim AS builder
 
-# Install build dependencies (if any C extensions required—none needed here)
-RUN apt-get update && apt-get install -y --no-install-recommends gcc libc-dev \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /install
 
-WORKDIR /app
+# Install build dependencies if any (e.g., for psutil—psutil has wheels for most platforms)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc libc-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy only requirements to leverage Docker cache
+# Copy only requirements to leverage cache
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Stage 2: Runtime
+# --------------------------------------
+# Stage 2: Final runtime image
+# --------------------------------------
 FROM python:3.9-slim
 
 # Create a non-root user
 RUN useradd --create-home --shell /bin/bash workeruser
 
+# Create app directory
 WORKDIR /app
 
-# Copy the installed packages from builder
+# Copy installed Python packages from builder
 COPY --from=builder /usr/local/lib/python3.9/site-packages/ /usr/local/lib/python3.9/site-packages/
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
-# Copy source code
+# Copy source code into /app/src
 COPY src/ /app/src
-COPY setup.cfg .  # for linting configuration, though not needed at runtime
 
-# Set environment variables
-ENV PYTHONPATH=/app/src \
-    PYTHONUNBUFFERED=1 \
-    DOCKER_SOCKET=/var/run/docker.sock
+# Set PYTHONPATH so that ‘worker’ package is found
+ENV PYTHONPATH=/app/src
+
+# Set environment variables defaults (can be overridden via Compose)
+ENV DOCKER_SOCKET=/var/run/docker.sock \
+    REDIS_HOST=redis \
+    REDIS_PORT=6379 \
+    LOG_LEVEL=INFO
+
+# Expose metrics port for Prometheus
+EXPOSE 8000
 
 # Switch to non-root user
 USER workeruser
 
-# Expose metrics port
-EXPOSE 8000
-
-# Entrypoint
+# Default command
 CMD ["python3", "-m", "worker.main"]
