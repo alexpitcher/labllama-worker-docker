@@ -1,0 +1,25 @@
+2025-06-01 16:20:17,849 - root - INFO - Logging configured at level: INFO
+2025-06-01 16:20:17,850 - __main__ - INFO - Starting LabLlama Worker on 0.0.0.0:8080
+2025-06-01 16:20:17,850 - __main__ - INFO - Bot URL: http://host.docker.internal:8000
+2025-06-01 16:20:17,856 - __main__ - ERROR - Failed to register with bot: Cannot connect to host localhost:8080 ssl:default [Connect call failed ('127.0.0.1', 8080)]
+2025-06-01 16:20:17,902 - __main__ - INFO - Starting heartbeat loop (interval: 30s)
+2025-06-01 16:20:18,958 - collectors.worker_collector - INFO - Docker connected successfully - Engine version: 28.2.2
+2025-06-01 16:20:26,820 - __main__ - ERROR - Failed to send heartbeat: Cannot connect to host host.docker.internal:8000 ssl:default [Connect call failed ('172.17.0.1', 8000)]
+2025-06-01 16:20:30,740 - __main__ - INFO - Shutting down worker...
+2025-06-01 16:20:30,741 - __main__ - INFO - Heartbeat loop cancelled
+2025-06-01 16:20:30,742 - __main__ - INFO - Worker shutdown complete
+2025-06-01 16:20:30,742 - __main__ - INFO - Shutting down worker...
+2025-06-01 16:20:30,742 - __main__ - INFO - Worker shutdown complete
+2025-06-01 16:21:18,966 - root - INFO - Logging configured at level: INFO
+2025-06-01 16:21:18,967 - __main__ - INFO - Starting LabLlama Worker on 0.0.0.0:8080
+2025-06-01 16:21:18,968 - __main__ - INFO - Bot URL: http://host.docker.internal:8000
+2025-06-01 16:21:18,973 - __main__ - ERROR - Failed to register with bot: Cannot connect to host localhost:8080 ssl:default [Connect call failed ('127.0.0.1', 8080)]
+2025-06-01 16:21:19,015 - __main__ - INFO - Starting heartbeat loop (interval: 30s)
+2025-06-01 16:21:20,077 - collectors.worker_collector - INFO - Docker connected successfully - Engine version: 28.2.2
+2025-06-01 16:21:35,816 - __main__ - ERROR - Failed to send heartbeat: Cannot connect to host host.docker.internal:8000 ssl:default [Connect call failed ('172.17.0.1', 8000)]
+2025-06-01 16:21:43,971 - api.routes - ERROR - Failed to get worker info: cannot access local variable 'socket' where it is not associated with a value
+2025-06-01 16:21:44,025 - services.command_executor - INFO - Executing safe command: system_uptime
+2025-06-01 16:21:44,028 - services.command_executor - ERROR - Command execution error: [Errno 2] No such file or directory: 'uptime'
+2025-06-01 16:21:44,028 - services.command_executor - ERROR - Command execution failed: [Errno 2] No such file or directory: 'uptime'
+2025-06-01 16:22:13,919 - __main__ - ERROR - Failed to send heartbeat: Cannot connect to host host.docker.internal:8000 ssl:default [Connect call failed ('172.17.0.1', 8000)]
+2025-06-01 16:22:52,022 - __main__ - ERROR - Failed to send heartbeat: Cannot connect to host host.docker.internal:8000 ssl:default [Connect call failed ('172.17.0.1', 8000)]

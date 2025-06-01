@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  labllama-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: labllama-worker-test
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - LABLLAMA_BOT_URL=http://host.docker.internal:8000
+      - WORKER_HOST_ID=docker-01
+      - WORKER_PORT=8080
+      - WORKER_HOST=0.0.0.0
+      - HEARTBEAT_INTERVAL=30
+      - LOG_LEVEL=INFO
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./logs:/app/logs
+    networks:
+      - labllama-worker-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  labllama-worker-net:
+    driver: bridge
