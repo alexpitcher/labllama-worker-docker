@@ -31,8 +31,8 @@ docker-compose logs -f
 ### Using Docker
 
 ```bash
-# Build the image
-docker build -t labllama-worker .
+# Pull the pre-built image
+docker pull ghcr.io/alexpitcher/labllama-worker-docker
 
 # Run the container
 docker run -d \
@@ -40,7 +40,7 @@ docker run -d \
   -p 8080:8080 \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   -e LABLLAMA_BOT_URL=http://your-bot-url:8000 \
-  labllama-worker
+  ghcr.io/alexpitcher/labllama-worker-docker
 ```
 
 ## Configuration
