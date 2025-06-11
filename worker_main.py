@@ -40,7 +40,26 @@ class LabLlamaWorker:
         
     async def start(self):
         """Start the worker with registration and heartbeat."""
-        logger.info(f"Starting LabLlama Worker on {self.worker_host}:{self.worker_port}")
+        logger.info(f"Starting LabLlama Worker on {self.worker_host}:{self.worker_port}"
+        '''                                                                                                                                                         
+                                         bbbbbbbb                                                                                                        
+LLLLLLLLLLL                              b::::::b            LLLLLLLLLLL             lllllll                                                             
+L:::::::::L                              b::::::b            L:::::::::L             l:::::l                                                             
+L:::::::::L                              b::::::b            L:::::::::L             l:::::l                                                             
+LL:::::::LL                               b:::::b            LL:::::::LL             l:::::l                                                             
+  L:::::L                 aaaaaaaaaaaaa   b:::::bbbbbbbbb      L:::::L                l::::l   aaaaaaaaaaaaa      mmmmmmm    mmmmmmm     aaaaaaaaaaaaa   
+  L:::::L                 a::::::::::::a  b::::::::::::::bb    L:::::L                l::::l   a::::::::::::a   mm:::::::m  m:::::::mm   a::::::::::::a  
+  L:::::L                 aaaaaaaaa:::::a b::::::::::::::::b   L:::::L                l::::l   aaaaaaaaa:::::a m::::::::::mm::::::::::m  aaaaaaaaa:::::a 
+  L:::::L                          a::::a b:::::bbbbb:::::::b  L:::::L                l::::l            a::::a m::::::::::::::::::::::m           a::::a 
+  L:::::L                   aaaaaaa:::::a b:::::b    b::::::b  L:::::L                l::::l     aaaaaaa:::::a m:::::mmm::::::mmm:::::m    aaaaaaa:::::a 
+  L:::::L                 aa::::::::::::a b:::::b     b:::::b  L:::::L                l::::l   aa::::::::::::a m::::m   m::::m   m::::m  aa::::::::::::a 
+  L:::::L                a::::aaaa::::::a b:::::b     b:::::b  L:::::L                l::::l  a::::aaaa::::::a m::::m   m::::m   m::::m a::::aaaa::::::a 
+  L:::::L         LLLLLLa::::a    a:::::a b:::::b     b:::::b  L:::::L         LLLLLL l::::l a::::a    a:::::a m::::m   m::::m   m::::ma::::a    a:::::a 
+LL:::::::LLLLLLLLL:::::La::::a    a:::::a b:::::bbbbbb::::::bLL:::::::LLLLLLLLL:::::Ll::::::la::::a    a:::::a m::::m   m::::m   m::::ma::::a    a:::::a 
+L::::::::::::::::::::::La:::::aaaa::::::a b::::::::::::::::b L::::::::::::::::::::::Ll::::::la:::::aaaa::::::a m::::m   m::::m   m::::ma:::::aaaa::::::a 
+L::::::::::::::::::::::L a::::::::::aa:::ab:::::::::::::::b  L::::::::::::::::::::::Ll::::::l a::::::::::aa:::am::::m   m::::m   m::::m a::::::::::aa:::a
+LLLLLLLLLLLLLLLLLLLLLLLL  aaaaaaaaaa  aaaabbbbbbbbbbbbbbbb   LLLLLLLLLLLLLLLLLLLLLLLLllllllll  aaaaaaaaaa  aaaammmmmm   mmmmmm   mmmmmm  aaaaaaaaaa  aaaa
+''')
         logger.info(f"Will register with bot at: {self.bot_url}")
         
         # Create HTTP session
